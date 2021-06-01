@@ -1,6 +1,6 @@
 var exp = require("express");
 var app = exp();
-
+const bodyParser = require("body-parser");
 var mysql = require("mysql");
 var connection = mysql.createConnection({
   host: "localhost",
@@ -8,6 +8,12 @@ var connection = mysql.createConnection({
   password: "KinRai08011!",
   database: "todoapp",
 });
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
+app.use(bodyParser.json());
 
 app.get("/", function (req, res) {
   res.send("取得したいデータのURLにアクセスしてください");
@@ -21,7 +27,8 @@ app.get("/todos", function (req, res) {
 });
 app.post("/todos", function (req, res) {
   connection.query(
-    'insert into todo(user_id,title,description)values(1,"test","this is test todo")',
+    "insert into todo set ?",
+    req.body,
     function (error, results, fields) {
       if (error) throw error;
       res.send(results);
@@ -33,6 +40,7 @@ app.put("/todos", function (req, res) {
     'update todo set title = "testa" where id = 2',
     function (error, results, fields) {
       if (error) throw error;
+      console.log("POSTリクエストが成功しました")
       res.send(results);
     }
   );
