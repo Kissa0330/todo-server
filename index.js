@@ -35,19 +35,21 @@ app.post("/todos", function (req, res) {
     }
   );
 });
-app.put("/todos", function (req, res) {
+app.put("/todos/:id", function (req, res) {
+  const putcommand = 'update todo set ? where id = ' + req.params.id; 
   connection.query(
-    'update todo set title = "testa" where id = 2',
+    putcommand,req.body,
     function (error, results, fields) {
       if (error) throw error;
-      console.log("POSTリクエストが成功しました")
+      console.log("POSTリクエストが成功しました");
       res.send(results);
     }
   );
 });
 app.delete("/todos/:id", function (req, res) {
   connection.query(
-    "delete from todo where id = ?",[req.params.id],
+    "delete from todo where id = ?",
+    [req.params.id],
     function (error, results, fields) {
       if (error) throw error;
       res.send(results);
