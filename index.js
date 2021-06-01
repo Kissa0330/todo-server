@@ -45,9 +45,9 @@ app.put("/todos", function (req, res) {
     }
   );
 });
-app.delete("/todos", function (req, res) {
+app.delete("/todos/:id", function (req, res) {
   connection.query(
-    "delete from todo where id = 1",
+    "delete from todo where id = ?",[req.params.id],
     function (error, results, fields) {
       if (error) throw error;
       res.send(results);
